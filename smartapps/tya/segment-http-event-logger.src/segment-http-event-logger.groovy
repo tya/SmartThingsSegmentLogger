@@ -1,8 +1,8 @@
 /**
  * Event Logger For Segment
- * This was originally created by Brian Keifer.
- * Modified by TheFuzz4 (Github)  to work with the Segment HTTP Event Collector
  * Modified by tya (Githb) to work with the Segment HTTP Event Collector
+ * Modified by TheFuzz4 (Github)  to work with the Segment HTTP Event Collector
+ * This was originally created by Brian Keifer.
  *
  * Copyright 2015 Brian Keifer
  *
@@ -28,8 +28,10 @@ definition(
     namespace: "tya",
     author: "Brian Keifer and Jason Hamilton and Ty Alexander",
     description: "Log SmartThings events to a Segment HTTP Event Tracking API",
-    category: "Logging",
-    iconUrl: "http://fixme.soon/Segment_thumbnail.png",
+    category: "Convenience",
+    iconUrl: "http://apmblog.dynatrace.com/wp-content/uploads/2014/07/Splunk_thumbnail.png",
+    iconX2Url: "http://apmblog.dynatrace.com/wp-content/uploads/2014/07/Splunk_thumbnail.png",
+    iconX3Url: "http://apmblog.dynatrace.com/wp-content/uploads/2014/07/Splunk_thumbnail.png",
 )
 
 preferences {
@@ -144,25 +146,26 @@ def initialize() {
 }
 
 def segmentHttpEventLogger(evt) {
-    def token = segmentWriteKey.bytes.endoceBase64().toString()
-    def params = [
-        uri: "https://api.segment.io",
-        path: "/v1/track",
-        headers: ["Authorization": "basic ${token}"],
-        body: ["event": evt],
-    ]
+    log.debug evt
+    // def token = segmentWriteKey.bytes.endoceBase64().toString()
+    // def params = [
+    //     uri: "https://api.segment.io",
+    //     path: "/v1/track",
+    //     headers: ["Authorization": "basic ${token}"],
+    //     body: ["event": evt],
+    // ]
 
-    log.debug("Sending event to Segment")
-    log.debug(params)
-    try {
-        httpPostJson(params) { resp ->
-            log.debug "response message ${resp}"
-        }
-    } catch (e) {
-        // successful creates come back as 200, so filter for 'Created' and throw anything else
-        if (e.toString() != 'groovyx.net.http.ResponseParseException: Created') {
-            log.error "Error sending event: $e"
-            throw e
-        }
-    }
+    // log.debug("Sending event to Segment")
+    // log.debug(params)
+    // try {
+    //     httpPostJson(params) { resp ->
+    //         log.debug "response message ${resp}"
+    //     }
+    // } catch (e) {
+    //     // successful creates come back as 200, so filter for 'Created' and throw anything else
+    //     if (e.toString() != 'groovyx.net.http.ResponseParseException: Created') {
+    //         log.error "Error sending event: $e"
+    //         throw e
+    //     }
+    // }
 }
